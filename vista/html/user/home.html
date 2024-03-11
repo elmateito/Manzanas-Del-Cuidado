@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="../css/style.css">
+    <title>Bienvenid@</title>
+</head>
+
+<body>
+    <nav class="navbar bg-body-tertiary">
+        <div class="container">
+            <a href=""></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation" id="savedServices">
+                    <span class="navbar-toggler-icon"></span>
+                </button>           
+          <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+            <div class="offcanvas-header">
+              <h5 class="offcanvas-title fs-2" id="offcanvasNavbarLabel">Mis Solicitudes</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+              <ul class="navbar-nav justify-content-end flex-grow-1 pe-3" id="cartasServ">
+                <li class="nav-item dropdown">
+                    <div class="card text-bg-light mb-3" style="max-width: 18rem; display:none">
+<!--                         <div class="card-header">Solicitud 001</div>
+                        <div class="card-body">
+                          <h5 class="card-title">Gimnasio</h5>
+                          <p class="card-text">Deportes</p>
+                          <div class="card-footer bg-transparent border-secondary">21-04-2023 | 06:00</div>
+                          <form class="d-flex">
+                            <button class="btn btn-outline-danger btn-sm" id="deleteSol" type="submit">Borrar Solicitud</button> 
+                          </form> -->
+                        </div>
+                      </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+        <div class="card container align-self-center my-5 w-25 px-0">
+            <div class="card-header fs-1 fw-bold">
+            Mi Perfil:
+            </div>
+            <div class="card-body">
+            <div class="blockquote mb-0">
+                <p id="usertitle" class="fs-2"></p>
+                <footer class="blockquote-footer fs-5" id="doctitle"></footer>
+            </div>
+                <button class="btn btn-outline-danger btn-lg mt-2" id="close">Cerrar Sesión</button>
+            </div>
+        </div>
+
+    <div class="container">
+
+        <div class="alert alert-secondary container-sm fs-3 fw-semibold text-center text-wrap" role="alert">
+            | Bienvenide, seleccione el servicio, fecha y hora |
+        </div>
+        <!-- <h1 id="usertitle"></h1> -->
+
+        <button id="servAble" class="btn btn-dark mb-3 fs-4">Servicios Disponibles:</button>
+
+        <div id="servContainer" style="display: none;">
+
+            <form id="selectServForm">
+
+                <ul id="servLi"></ul>
+
+                <div id="contR">
+                    <input type="datetime-local" id="fechaHora" name="fechaHora" required>
+                    <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                </div>
+                
+            </form>
+
+        </div>
+
+    </div>
+
+    <script>
+        //precargar eventos antes de accionar boton
+        document.addEventListener('DOMContentLoaded',()=>{
+            const xhrUser = new XMLHttpRequest();
+            xhrUser.open('POST', '/read-user', true);
+            xhrUser.onreadystatechange=function(){
+                if(xhrUser.readyState === 4){
+                    if(xhrUser.status===200){
+                        const username = JSON.parse(xhrUser.responseText);
+                        document.getElementById('usertitle').textContent = username.nombre
+                        const doctype = JSON.parse(xhrUser.responseText);
+                        const docnum = JSON.parse(xhrUser.responseText);
+                        document.getElementById('doctitle').textContent = doctype.tipo +': '+ docnum.docnum 
+                    }else{
+                    console.error('error al obtener nombre de usuario')
+                    }
+                }
+            };
+            xhrUser.send();
+
+            const servContainer = document.getElementById('servContainer')
+            const selectServForm = document.getElementById('selectServForm')
+            const servAble = document.getElementById('servAble')
+            const servLi = document.getElementById('servLi')
+
+            servAble.addEventListener('click',()=>{
+                //crear request
+                const xhr = new XMLHttpRequest()
+                xhr.open('POST', '/get-user-service', true)
+                xhr.setRequestHeader('Content-type', 'application/json')
+                xhr.onreadystatechange = function(){
+                    if(xhr.readyState === 4){
+                        if(xhr.status === 200){
+                            const data = JSON.parse(xhr.responseText)
+                            servLi.innerHTML = data.servicios.map(servicio=>`
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="servicios" id="servicios" value="${servicio}" checked>
+                                <label class="form-check-label" for="servicios">
+                                    ${servicio}
+                                </label>
+                            </div>
+                            `).join('')
+                            servContainer.style.display="flex"
+                            servContainer.style.justifyContent="space-between"
+                            servContainer.style.alignItems="center"
+                        } else{
+                            console.error('Services err')
+                        }
+                    }
+                }
+                xhr.send();
+            })
+
+            selectServForm.addEventListener('submit', async()=>{
+                event.preventDefault()
+                console.log(selectServForm.elements['servicios'])
+                const selected = Array.from(selectServForm.elements['servicios'])
+                .filter(radio=>radio.checked).map(radio=>radio.value)
+                
+                const fechaHora = selectServForm.elements['fechaHora'].value
+    
+                const xhrsaved = new XMLHttpRequest()
+                xhrsaved.open('POST', '/save-user-service', true)
+                    xhrsaved.setRequestHeader('Content-type', 'application/json')
+                    xhrsaved.onreadystatechange = function(){
+                        if(xhrsaved.readyState === 4){
+                            if(xhrsaved.status === 200){
+                                alert('Solicitud Guardada')
+                                window.location.reload()
+                            } else{
+                                console.error('Services err')
+                            }
+                        }
+                    }
+                xhrsaved.send(JSON.stringify({servicios: selected, fechaHora:fechaHora}))
+            })
+            
+            const savedServices = document.getElementById('savedServices');
+            const cartasServ = document.getElementById('cartasServ');
+
+            savedServices.addEventListener('click',()=>{
+                //crear request
+                const xhr = new XMLHttpRequest()
+                xhr.open('POST', '/solicitudes', true)
+                xhr.setRequestHeader('Content-type', 'application/json')
+                xhr.onreadystatechange = function(){
+                    if(xhr.readyState === 4 && xhr.status === 200){
+                            const data = JSON.parse(xhr.responseText)
+                            cartasServ.innerHTML = data.solicitudes.map(solicitud=>`
+                            <li class="nav-item dropdown">
+                                <div class="card text-bg-light mb-3" style="max-width: 18rem;">
+                                    <div class="card-header">Número de Solicitud: ${solicitud[0]}</div>
+                                    <div class="card-body">
+                                    <h5 class="card-title">${solicitud[1]}</h5>
+                                    <p class="card-text">${solicitud[2]}</p>
+                                    <div class="card-footer bg-transparent border-secondary">${solicitud[3]}</div>
+                                        <button data-id="${solicitud[0]}" class="btn btn-outline-danger btn-sm" id="deleteSol" name="deleteSol">Borrar Solicitud</button>
+                                    </div>
+                                </div>
+                            </li>
+                            `).join('')
+
+                        const deleteSol = cartasServ.querySelectorAll('#deleteSol')
+
+                        deleteSol.forEach(button =>{
+                            button.addEventListener('click', (event)=>{
+                                event.preventDefault()
+                                const idSol = button.dataset.id
+                                console.log(idSol)
+                                const xhrdelete = new XMLHttpRequest()
+                                xhrdelete.open('DELETE', '/delete-solicitudes', true)
+                                xhrdelete.setRequestHeader('Content-type', 'application/json')
+                                xhrdelete.onreadystatechange = function(){
+                                    if(xhrdelete.readyState === 4 && xhrdelete.status === 200){
+                                        alert('Solicitud eliminada')
+                                        window.location.reload()
+                                    }else{
+                                        console.log('Delete err')
+                                    }
+                                }
+                                xhrdelete.send(JSON.stringify({idSol}))
+                            })
+                        })
+                        }else{
+                            console.error('Services err')
+                        }
+                    }
+                    xhr.send();
+                })
+                        
+            const close = document.getElementById('close')
+
+            close.addEventListener('click', ()=>{
+                const xhrclose = new XMLHttpRequest()
+                xhrclose.open('POST', '/close-session', true)
+                xhrclose.setRequestHeader('Content-type', 'application/json')
+                xhrclose.onreadystatechange = function(){
+                    if(xhrclose.readyState === 4 && xhrclose.status === 200){
+                        window.location.href = 'http://127.0.0.1:5500/vista/html/index.html'
+                    }else{
+                        console.error('Error al cerrar sesión')
+                    }
+                }
+                xhrclose.send()
+            })
+
+            window.onload = function(){
+                window.history.forward();
+            }
+
+            window.onpageshow = function(ok){
+                if(ok.persisted){
+                    window.location.reload();
+                }
+            }
+
+        });
+
+
+    </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>

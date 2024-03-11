@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>Menu de Administrador</title>
+</head>
+<body>
+  <nav class="navbar bg-body-tertiary">
+    <div class="container-fluid">
+          <a href=""></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation" id="savedServices">
+                    <span class="navbar-toggler-icon"></span>
+                </button>           
+          <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                  <h5 class="offcanvas-title fs-2" id="offcanvasNavbarLabel">Mi Perfil</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <div class="card container mt-2 px-0">
+                        <div class="card-header fs-1 fw-bold" id="admintitle">
+                        </div>
+                        <div class="card-body">
+                        <div class="blockquote mb-0">
+                            <p id="adminrol" class="fs-2"></p>
+                            <footer class="blockquote-footer fs-5" id="doctitle"></footer>
+                        </div>
+                                <button type="button" class="btn btn-outline-danger btn-lg mt-2" id="close">Cerrar Sesión</button>
+                        </div>
+                    </div>
+                </div>
+          </div>
+    </div>
+  </nav>
+
+    <div class="container">
+
+        <div class="alert alert-secondary container-sm fs-3 my-5 fw-semibold text-center text-wrap" role="alert">
+            | Bienvenide al panel de funciones de Administrador |
+        </div>
+
+        <p class="hstack gap-5 d-flex align-items-center justify-content-space-between">
+            <a class="btn btn-primary p-2 ms-5" data-bs-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">Servicios</a>
+            <a class="btn btn-primary p-2 ms-auto me-5" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">Manzanas</a>
+          </p>
+          <div class="row">
+            <div class="col">
+              <div class="collapse multi-collapse" id="multiCollapseExample1">
+                <div class="card card-body">
+                    <div class="list-group">
+                      <a href="http://localhost:3000/create-service-page" class="list-group-item list-group-item-action">
+                          <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">· Insertar</h5>
+                            <h5 class="mb-1">· Actualizar</h5>
+                            <h5 class="mb-1">· Eliminar</h5>
+                          </div>
+                          <p class="mb-1">Servicios de la base de datos.</p>
+                          <small class="text-body-secondary">→ | Nombre servicio | Tipo servicio |</small>
+                          <br>
+                          <small class="text-body-secondary">→ | Nuevo Nombre | Tipo Servicio |</small>
+                          <br>
+                          <small class="text-body-secondary p-0">→ | DELETE |</small>
+                      </a>
+
+                    </div>
+                </div>
+              </div>
+            </div>
+            <!-- servicios: insertar, actualizar y eliminar -->
+            <div class="col">
+              <div class="collapse multi-collapse" id="multiCollapseExample2">
+                <div class="card card-body">
+                    <div class="list-group">
+                        <a href="http://localhost:3000/create-manzana-page" class="list-group-item list-group-item-action">
+                          <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">· Agregar</h5>
+                            <h5 class="mb-1">· Actualizar</h5>
+                          </div>
+                          <p class="mb-1">Manzanas a la base de datos.</p>
+                          <small class="text-body-secondary">→| Nombre Manzana | Dirección Manzana |</small>
+                          <br>
+                          <small class="text-body-secondary p-0">→| Nuevo Nombre | Nueva Dirección |</small>
+                        </a>
+                    </div>
+                </div>
+              </div>
+              <!-- manzanas: agregar y actualizar -->
+            </div>
+          </div>
+
+    </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', ()=>{
+      const xhrUser = new XMLHttpRequest();
+            xhrUser.open('POST', '/read-user', true);
+            xhrUser.onreadystatechange=function(){
+                if(xhrUser.readyState === 4){
+                    if(xhrUser.status===200){
+                        const username = JSON.parse(xhrUser.responseText);
+                        document.getElementById('admintitle').textContent = username.nombre
+                        const rol = JSON.parse(xhrUser.responseText);
+                        document.getElementById('adminrol').textContent = rol.rol
+                        const doctype = JSON.parse(xhrUser.responseText);
+                        const docnum = JSON.parse(xhrUser.responseText);
+                        document.getElementById('doctitle').textContent = doctype.tipo +': '+ docnum.docnum 
+                    }else{
+                    console.error('error al obtener nombre de usuario')
+                    }
+                }
+            };
+          xhrUser.send();
+
+          const close = document.getElementById('close')
+
+          close.addEventListener('click', ()=>{
+              const xhrclose = new XMLHttpRequest()
+              xhrclose.open('POST', '/close-session', true)
+              xhrclose.setRequestHeader('Content-type', 'application/json')
+              xhrclose.onreadystatechange = function(){
+                  if(xhrclose.readyState === 4 && xhrclose.status === 200){
+                      window.location.href = 'http://127.0.0.1:5500/vista/html/index.html'
+                  }else{
+                      console.error('Error al cerrar sesión')
+                  }
+              }
+              xhrclose.send()
+          })
+
+          window.onload = function(){
+              window.history.forward();
+          }
+
+          window.onpageshow = function(ok){
+              if(ok.persisted){
+                  window.location.reload();
+              }
+          }
+    
+    })
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>

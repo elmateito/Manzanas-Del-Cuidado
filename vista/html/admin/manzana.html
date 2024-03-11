@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>Manzanas</title>
+</head>
+<body>
+    <nav class="navbar bg-body-tertiary">
+        <div class="container-fluid">
+            <a href=""></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation" id="savedServices">
+                    <span class="navbar-toggler-icon"></span>
+                </button>           
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                <h5 class="offcanvas-title fs-2" id="offcanvasNavbarLabel">Mi Perfil</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <div class="card container mt-2 px-0">
+                        <div class="card-header fs-1 fw-bold" id="admintitle">
+                        </div>
+                        <div class="card-body">
+                        <div class="blockquote mb-0">
+                            <p id="adminrol" class="fs-2"></p>
+                            <footer class="blockquote-footer fs-5" id="doctitle"></footer>
+                        </div>
+                            <form action="http://localhost:3000/get-admin">
+                                <button type="submit" class="btn btn-outline-primary btn-lg mt-2">Ir a Inicio</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+          </div>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <div class="alert alert-secondary container-sm w-75 fs-3 my-5 fw-semibold text-center text-wrap" role="alert">
+            | Administrador: Insertar Manzanas nuevas y/o Eliminar Manzanas existentes |
+        </div>
+
+        <form method="post" action="http://localhost:3000/create-manzana" class="container-sm d-flex justify-content-around text-center w-75 mb-3">
+            <div class="row">
+                <div class="col">
+                    <input type="text" class="form-control form-control-lg" placeholder="Nombre Manzana" aria-label="Nombre Manzana" name="nomManzana" id="nomManzana" required>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control form-control-lg" placeholder="Dirección Manzana" aria-label="Dirección Manzana" name="dirManzana" id="dirManzana" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-outline-success btn-lg align-self-center ms-4">Insertar</button>
+        </form>
+
+        <div class="table-responsive container w-75">
+            <table class="table table-responsive table-sm table-hover align-middle table-striped table-bordered">
+                <thead>
+                    <tr class="align-middle text-center">
+                      <th scope="col" class="fs-4">#</th>
+                      <th scope="col" class="fs-4">Nombre Manzana</th>
+                      <th scope="col" class="fs-4">Dirección Manzana</th>
+                      <th scope="col" class="fs-4 w-5">Acción</th>
+                    </tr>
+                  </thead>
+                  <tbody class="table-group-divider" id="globalManzanas">
+    <!--            <tr>
+                      <th scope="row" class="fs-5">1</th>
+                      <td class="fs-5">aser la comia</td>
+                      <td class="fs-5">deporte</td>
+                      <td>
+                        <button class="btn btn-warning m-1">Paja</button>
+                        <button class="btn btn-danger m-1">Seso</button>
+                      </td>
+                    </tr> -->
+                  </tbody>
+            </table>
+    
+        </div>
+    
+    </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', ()=>{
+
+        const xhrUser = new XMLHttpRequest();
+        xhrUser.open('POST', '/read-user', true);
+        xhrUser.onreadystatechange=function(){
+            if(xhrUser.readyState === 4){
+                if(xhrUser.status===200){
+                    const username = JSON.parse(xhrUser.responseText);
+                    document.getElementById('admintitle').textContent = username.nombre
+                    const rol = JSON.parse(xhrUser.responseText);
+                    document.getElementById('adminrol').textContent = rol.rol
+                    const doctype = JSON.parse(xhrUser.responseText);
+                    const docnum = JSON.parse(xhrUser.responseText);
+                    document.getElementById('doctitle').textContent = doctype.tipo +': '+ docnum.docnum 
+                }else{
+                console.error('error al obtener nombre de usuario')
+                }
+            }
+        };
+      xhrUser.send();
+
+    const globalManzanas = document.getElementById('globalManzanas')
+
+    const xhrmanzanas = new XMLHttpRequest();
+    xhrmanzanas.open('POST', '/get-manzanas', true);
+    xhrmanzanas.setRequestHeader('Content-type', 'application/json')
+    xhrmanzanas.onreadystatechange=function(){
+            if(xhrmanzanas.readyState === 4 && xhrmanzanas.status === 200){
+                const data = JSON.parse(xhrmanzanas.responseText)
+                globalManzanas.innerHTML = data.manzanas.map(manzana=>`
+                        <tr>
+                            <th scope="row" class="fs-5">${manzana[0]}</th>
+                            <td class="fs-5">${manzana[1]}</td>
+                            <td class="fs-5">${manzana[2]}</td>
+                            <td class="w-5 align-middle text-center">
+                                <button class="btn btn-danger m-1 px-3" data-id="${manzana[0]}" id="deleteManzana" name="deleteManzana">Eliminar</button>
+                            </td>
+                        </tr>
+                    `).join('')
+
+            const deleteManzana = globalManzanas.querySelectorAll('#deleteManzana')
+
+            deleteManzana.forEach(button => {
+                button.addEventListener('click', (event)=>{
+                event.preventDefault();
+                const idMan = button.dataset.id
+                console.log(idMan)
+                const xhrdelete = new XMLHttpRequest()
+                xhrdelete.open('DELETE', '/delete-manzana', true)
+                xhrdelete.setRequestHeader('Content-type', 'application/json')
+                xhrdelete.onreadystatechange = function(){
+                    if(xhrdelete.readyState === 4 && xhrdelete.status === 200){
+                        alert("Manzana eliminada")
+                        window.location.reload(false)
+                    }else{
+                        console.error('Error al borrar manzana')
+                    }
+                }
+                xhrdelete.send(JSON.stringify({idMan}))
+                });                    
+            }) 
+            }else{
+                console.error('Error al mapear manzanas')
+            }
+        };
+    xhrmanzanas.send();
+
+    })
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>
