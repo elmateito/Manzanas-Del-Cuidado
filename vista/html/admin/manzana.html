@@ -40,7 +40,11 @@
     <div class="container">
 
         <div class="alert alert-secondary container-sm w-75 fs-3 my-5 fw-semibold text-center text-wrap" role="alert">
+<<<<<<< HEAD
             | Administrador: Insertar Manzanas nuevas y/o Eliminar Manzanas existentes |
+=======
+            | Administrador: Insertar Manzanas nuevasz, Actualizar y/o Eliminar Manzanas existentes |
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
         </div>
 
         <form method="post" action="http://localhost:3000/create-manzana" class="container-sm d-flex justify-content-around text-center w-75 mb-3">
@@ -118,7 +122,43 @@
                             <td class="fs-5">${manzana[1]}</td>
                             <td class="fs-5">${manzana[2]}</td>
                             <td class="w-5 align-middle text-center">
+<<<<<<< HEAD
                                 <button class="btn btn-danger m-1 px-3" data-id="${manzana[0]}" id="deleteManzana" name="deleteManzana">Eliminar</button>
+=======
+
+                            <div class="d-flex flex-row justify-content-evenly">
+
+                                <button class="btn btn-danger m-1 px-3" data-id="${manzana[0]}" id="deleteManzana" name="deleteManzana">Eliminar</button>
+
+                                <div class="dropstart">
+
+                                    <button type="button" class="btn btn-warning dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                                        Actualizar
+                                    </button>
+
+                                    <form class="dropdown-menu p-3" method="post" action="http://localhost:3000/update-manzana">
+
+                                        <input class="d-none" id="idMan" name="idMan" value="${manzana[0]}"></input>
+
+                                        <div class="mb-3">
+                                            <label for="namMan" class="form-label">Nuevo Nombre</label>
+                                            <input id="namMan" name="namMan" type="text" class="form-control" required>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="dirMan" class="form-label">Nueva Dirección</label>
+                                            <input id="dirMan" name="dirMan" type="text" class="form-control" required>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-outline-primary">Guardar</button>
+
+                                    </form>
+
+                                </div>
+                            
+                            </div>
+
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
                             </td>
                         </tr>
                     `).join('')

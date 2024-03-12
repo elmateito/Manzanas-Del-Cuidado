@@ -1,5 +1,6 @@
 const exp = require('express');
 const bp = require('body-parser');
+<<<<<<< HEAD
 /* const mysql = require('mysql'); */
 const mysql = require('mysql2/promise')
 const { send } = require('express/lib/response');
@@ -8,6 +9,11 @@ const { createConnection } = require('mysql2');
 const session = require('express-session');
 const path = require('path');
 const { ifError } = require('assert');
+=======
+const mysql = require('mysql2/promise')
+const session = require('express-session');
+const path = require('path');
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
 const app = exp();
 
 //set middlewares
@@ -40,7 +46,11 @@ const db = {
     database: 'manzanas'
 }
 
+<<<<<<< HEAD
 /* --- CREDENCIALES --- */
+=======
+/* ----- CREDENCIALES ----- */
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
 
 /* CREAR USUARIO */
 
@@ -105,6 +115,10 @@ app.post('/read', async(req, res)=>{
                 res.sendFile(path.join(__dirname,'../vista/html/user/home.html'))
             }
         }else{
+<<<<<<< HEAD
+=======
+            console.log('Error al Iniciar Sesión', err)
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
             res.status(401).send(`
             <script>
                 window.onload = function(){
@@ -116,7 +130,11 @@ app.post('/read', async(req, res)=>{
         }
         await conn.end()
     }catch (err) {
+<<<<<<< HEAD
         console.log('Reg error', err)
+=======
+        console.log('Error al registrar', err)
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
         res.status(500).send(`
         <script>
             window.onload = function(){
@@ -144,11 +162,19 @@ app.post('/read-user', (req, res)=>{
     }
 })
 
+<<<<<<< HEAD
 app.post('/get-iamge', (req,res)=>{
     res.sendFile(path.join(__dirname,'../vista/media/logo-simbolo-mc_.png'))
 })
 
 /* --- USUARIO --- */
+=======
+app.post('/get-image', (req,res)=>{
+    res.sendFile(path.join(__dirname,'../vista/media/logo-simbolo-mc_.png'))
+})
+
+/* ----- USUARIO ----- */
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
 
 /* MOSTRAR SERVICIOS */
 
@@ -164,7 +190,11 @@ app.post('/get-user-service', async(req,res)=>{
         res.json({servicios: serviceData.map(row=>row.nombreServicio)})
     await conn.end()
     } catch (error) {
+<<<<<<< HEAD
         console.error('Server err', error)
+=======
+        console.error('Error al mostrar Servicios', error)
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
         res.status(500).send('ay q mondaquera')
     }
 })
@@ -189,7 +219,11 @@ app.post('/solicitudes', async(req,res)=>{
         })
     await conn.end()
     } catch (error) {
+<<<<<<< HEAD
         console.error('Save err', error)
+=======
+        console.error('Error al mostrar Solicitudes', error)
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
         res.status(500).send('ay q mondaquera')
     }
 })
@@ -222,7 +256,11 @@ app.post('/save-user-service', async(req, res)=>{
         `)
     await conn.end()
     }catch (error) {
+<<<<<<< HEAD
         console.error('Save err', error)
+=======
+        console.error('Error al guardar Solicitud', error)
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
         res.status(500).send('ay q mondaquera')
     }
 })
@@ -247,19 +285,30 @@ app.delete('/delete-solicitudes', async(req, res)=>{
         console.log('Solicitud Borrada')
         await conn.end()
     } catch (error) {
+<<<<<<< HEAD
         console.error('Delete err', error)
+=======
+        console.error('Error al borrar Solicitud', error)
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
         res.status(500).send('ay q mondaquera')
     }
 })
 
 
+<<<<<<< HEAD
 /* --- ADMINISTRADOR --- */
+=======
+/* ----- ADMINISTRADOR ----- */
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
 
 
 /* FUNCIONES SERVICIOS */
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
 app.get('/get-admin', async(req,res)=>{
     res.sendFile(path.join(__dirname,'../vista/html/admin/admin.html'))
 })
@@ -288,7 +337,11 @@ app.post('/create-service', async(req, res)=>{
         console.log('Servicio Creado')
         await conn.end()
     } catch (error) {
+<<<<<<< HEAD
         console.error('Save err', error)
+=======
+        console.error('Error al crear Servicio', error)
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
         res.status(500).send('ay q mondaquera')
     }
 })
@@ -309,7 +362,11 @@ app.post('/update-service', async (req, res)=>{
         </script>`)
         await conn.end()
     }catch (error) { 
+<<<<<<< HEAD
         console.error('Server err', error)
+=======
+        console.error('Error al actualizar Servicio', error)
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
         res.status(500).send('ay q mondaquera')
     }
 }) 
@@ -333,7 +390,11 @@ app.post('/get-services', async(req,res)=>{
     })
     await conn.end()
     } catch (error) {
+<<<<<<< HEAD
         console.error('Server err', error)
+=======
+        console.error('Error al mostrar Servicio', error)
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
         res.status(500).send('ay q mondaquera')
     }
 })
@@ -358,19 +419,31 @@ app.delete('/delete-service', async(req, res)=>{
         console.log('Servicio Borrado')
         await conn.end()
     }catch(error){
+<<<<<<< HEAD
         console.error('Server err', error)
+=======
+        console.error('Error al borrar Servicio', error)
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
         res.status(500).send('ay q mondaquera')
     }
 })
 
 /* FUNCIONES MANZANAS */
 
+<<<<<<< HEAD
 /* CREAR MANZANA */
 
+=======
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
 app.get('/create-manzana-page', async(req,res)=>{
     res.sendFile(path.join(__dirname,'../vista/html/admin/manzana.html'))
 })
 
+<<<<<<< HEAD
+=======
+/* CREAR MANZANA */
+
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
 app.post('/create-manzana', async(req, res)=>{
     const {nomManzana, dirManzana} = req.body
     console.log(nomManzana, dirManzana)
@@ -389,11 +462,39 @@ app.post('/create-manzana', async(req, res)=>{
         console.log('Manzana Creada')
         await conn.end()
     } catch (error) {
+<<<<<<< HEAD
         console.error('Save err', error)
+=======
+        console.error('Error al crear Manzana', error)
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
         res.status(500).send('ay q mondaquera')
     }
 })
 
+<<<<<<< HEAD
+=======
+/* ACTUALIZAR MANZANA */
+
+app.post('/update-manzana', async (req, res)=>{
+    const {idMan, namMan, dirMan} = req.body;
+    console.log(idMan, namMan, dirMan)
+    try{
+        const conn = await mysql.createConnection(db)
+        await conn.execute('UPDATE manzanas SET nombreManzana = ?, direccionManzana = ? WHERE idManzana = ?', [namMan, dirMan, idMan])
+        res.status(200).send(`
+        <script> 
+            alert('Manzana Actualizada')
+            window.location.reload()
+            history.back()
+        </script>`)
+        await conn.end()
+    }catch (error) { 
+        console.error('Error al actualizar Manzana', error)
+        res.status(500).send('ay q mondaquera')
+    }
+}) 
+
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
 /*  ELIMINAR MANZANA */
 
 app.delete('/delete-manzana', async(req, res)=>{
@@ -414,7 +515,11 @@ app.delete('/delete-manzana', async(req, res)=>{
         console.log('Manzana Borrada')
         await conn.end()
     }catch(error){
+<<<<<<< HEAD
         console.error('Server err', error)
+=======
+        console.error('Error al borrar Manzana', error)
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
         res.status(500).send('ay q mondaquera')
     }
 })
@@ -439,7 +544,88 @@ app.post('/get-manzanas', async(req,res)=>{
         })
     await conn.end()
     } catch (error) {
+<<<<<<< HEAD
         console.error('Server err', error)
+=======
+        console.error('Error al mostrar Manzanas', error)
+        res.status(500).send('ay q mondaquera')
+    }
+})
+
+/* FUNCIONES USUARIOS */
+
+app.get('/update-user-page', async(req,res)=>{
+    res.sendFile(path.join(__dirname,'../vista/html/admin/usuarios.html'))
+})
+
+/* MOSTRAR USUARIOS */
+
+app.post('/get-users', async(req,res)=>{
+    const username = req.session.usuario
+    const doctype = req.session.tipo
+    const docnum = req.session.docnum
+    console.log({username, doctype, docnum})
+    try {
+        const conn = await mysql.createConnection(db)     
+        const [userData] = await conn.execute(`SELECT * FROM usuarios WHERE rol = 'Usuario'`)
+        console.log(userData)
+        res.json({usuarios: userData.map(row=>([
+            row.idUsuario,
+            row.nombre,
+            row.tipoDoc,
+            row.doc
+        ]))
+    })
+    await conn.end()
+    } catch (error) {
+        console.error('Error al mostrar Usuarios', error)
+        res.status(500).send('ay q mondaquera')
+    }
+})
+
+/* ACTUALIZAR USUARIOS */
+
+app.post('/update-user', async (req, res)=>{
+    const {idUser, namUser, tipoDoc} = req.body;
+    console.log(idUser, namUser, tipoDoc)
+    try{
+        const conn = await mysql.createConnection(db)
+        await conn.execute('UPDATE usuarios SET nombre = ?, tipoDoc = ? WHERE idUsuario = ?', [namUser, tipoDoc, idUser])
+        res.status(200).send(`
+        <script> 
+            alert('Usuario Editado')
+            window.location.reload()
+            history.back()
+        </script>`)
+        await conn.end()
+    }catch (error) { 
+        console.error('Error al editar Usuario', error)
+        res.status(500).send('ay q mondaquera')
+    }
+})
+
+/* ELIMINAR USUARIOS */ 
+
+app.delete('/delete-user', async(req, res)=>{
+    const {idUser} = req.body
+    console.log(idUser)
+    try{
+        const conn = await mysql.createConnection(db);
+        await conn.execute('DELETE FROM usuarios WHERE idUsuario = ?', [idUser]);
+        res.status(200).send(`
+        <script>
+            window.onload = function(){
+                alert('Usuario Borrado')
+                window.location.reload()
+                history.back()
+            }
+        </script>
+        `)
+        console.log('Usuario Borradoa')
+        await conn.end()
+    }catch(error){
+        console.error('Error al borrar Usuario', error)
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
         res.status(500).send('ay q mondaquera')
     }
 })
@@ -458,7 +644,11 @@ app.post('/close-session', async(req, res)=>{
     })
 })
 
+<<<<<<< HEAD
 /* --- PUERTO EN ESCUCHA --- */ 
+=======
+/* ----- PUERTO EN ESCUCHA ----- */ 
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
 
 app.listen(3000, ()=>{
     console.log('Server listening');

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>Usuarios</title>
+</head>
+<body>
+    <nav class="navbar bg-body-tertiary">
+        <div class="container-fluid">
+            <a href=""></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation" id="savedServices">
+                    <span class="navbar-toggler-icon"></span>
+                </button>           
+              <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                    <div class="offcanvas-header">
+                      <h5 class="offcanvas-title fs-2" id="offcanvasNavbarLabel">Mi Perfil</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <div class="card container mt-2 px-0">
+                            <div class="card-header fs-1 fw-bold" id="admintitle">
+                            </div>
+                            <div class="card-body">
+                            <div class="blockquote mb-0">
+                                <p id="adminrol" class="fs-2"></p>
+                                <footer class="blockquote-footer fs-5" id="doctitle"></footer>
+                            </div>
+                                <form action="http://localhost:3000/get-admin">
+                                    <button type="submit" class="btn btn-outline-primary btn-lg mt-2">Ir a Inicio</button>
+                                </form> 
+                            </div>
+                        </div>
+                    </div>
+              </div>
+        </div>
+      </nav>
+
+    <div class="container">
+
+        <div class="alert alert-secondary container-sm w-75 fs-3 my-5 fw-semibold text-center align-self-center text-wrap" role="alert">
+            | Administrador: Editar y/o Eliminar Usuarios |
+        </div>
+
+        <div class="table-responsive container w-75">
+            <table class="table table-responsive table-sm table-hover align-middle table-striped table-bordered">
+                <thead>
+                    <tr class="align-middle text-center">
+                        <th scope="col" class="fs-4">#</th>
+                        <th scope="col" class="fs-4 w-75">Nombre</th>
+                        <th scope="col" class="fs-4">Tipo</th>
+                        <th scope="col" class="fs-4 w-75">Número</th>
+                        <th scope="col" class="fs-4 w-25">Acción</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider" id="globalUsers">
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', ()=>{
+      const xhrUser = new XMLHttpRequest();
+            xhrUser.open('POST', '/read-user', true);
+            xhrUser.onreadystatechange=function(){
+                if(xhrUser.readyState === 4){
+                    if(xhrUser.status===200){
+                        const username = JSON.parse(xhrUser.responseText);
+                        document.getElementById('admintitle').textContent = username.nombre
+                        const rol = JSON.parse(xhrUser.responseText);
+                        document.getElementById('adminrol').textContent = rol.rol
+                        const doctype = JSON.parse(xhrUser.responseText);
+                        const docnum = JSON.parse(xhrUser.responseText);
+                        document.getElementById('doctitle').textContent = doctype.tipo +': '+ docnum.docnum 
+                    }else{
+                    console.error('error al obtener nombre de usuario')
+                    }
+                }
+            };
+          xhrUser.send();
+
+        const globalUsers = document.getElementById('globalUsers')
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/get-users', true);
+        xhr.setRequestHeader('Content-type', 'application/json')
+        xhr.onreadystatechange=function(){
+                if(xhr.readyState === 4 && xhr.status === 200){
+                    const data = JSON.parse(xhr.responseText)
+                    globalUsers.innerHTML = data.usuarios.map(usuario=>`
+                            <tr>
+                                <th scope="row" class="fs-5">${usuario[0]}</th>
+                                <td class="fs-5">${usuario[1]}</td>
+                                <td class="fs-5">${usuario[2]}</td>
+                                <td class="fs-5">${usuario[3]}</td>
+                                <td>
+                                    <div class="d-flex flex-row justify-content-evenly">
+                                        <button class="btn btn-danger me-1" id="deleteUser" name="deleteUser" data-id="${usuario[0]}">Eliminar</button>
+
+                                        <div class="dropdup">
+
+                                            <button type="button" class="btn btn-warning dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                                                Editar
+                                            </button>
+
+                                            <form class="dropdown-menu p-3" method="post" action="http://localhost:3000/update-user">
+
+                                                <input class="d-none" id="idUser" name="idUser" value="${usuario[0]}"></input>
+
+                                                <div class="mb-3">
+                                                    <label for="namUser" class="form-label">Nuevo Nombre</label>
+                                                    <input id="namUser" name="namUser" type="text" class="form-control" required>
+                                                </div>
+
+                                                <label class="form-label">Nuevo Tipo</label>
+                                                <select class="form-select mb-3" id="tipoDoc" name="tipoDoc" required>
+                                                    <option style="display:none">
+                                                    <option value="T.I">T.I</option>
+                                                    <option value="C.C">C.C</option>
+                                                </select>        
+
+                                                <button type="submit" class="btn btn-outline-primary">Guardar</button>
+
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        `).join('')
+
+                    const deleteUser = globalUsers.querySelectorAll('#deleteUser')
+
+                    deleteUser.forEach(button => {
+                        button.addEventListener('click', (event)=>{
+                        event.preventDefault();
+                        const idUser = button.dataset.id
+                        console.log(idUser)
+                        const xhrdelete = new XMLHttpRequest()
+                        xhrdelete.open('DELETE', '/delete-user', true)
+                        xhrdelete.setRequestHeader('Content-type', 'application/json')
+                        xhrdelete.onreadystatechange = function(){
+                            if(xhrdelete.readyState === 4 && xhrdelete.status === 200){
+                                alert("Usuario Eliminado")
+                                window.location.reload()
+                            }else{
+                                console.error('Error al borrar Usuario')
+                            }
+                        }
+                        xhrdelete.send(JSON.stringify({idUser}))
+                        });                    
+                    })
+
+                }
+            };
+        xhr.send()
+    })
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>

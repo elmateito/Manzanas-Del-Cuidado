@@ -120,9 +120,15 @@
                     const data = JSON.parse(xhrservices.responseText)
                         globalServices.innerHTML = data.services.map(service=>`
                             <tr>
+<<<<<<< HEAD
                                 <th scope="row" class="fs-5" id="idServ" name="idServ">${service[0]}</th>
                                 <td class="fs-5" id="namServ" id="namServ">${service[1]}</td>
                                 <td class="fs-5" id="tipoServ" name="tipoServ">${service[2]}</td>
+=======
+                                <th scope="row" class="fs-5">${service[0]}</th>
+                                <td class="fs-5">${service[1]}</td>
+                                <td class="fs-5">${service[2]}</td>
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
                                 <td>
                                     <div class="d-flex flex-row justify-content-evenly">
                                         <button class="btn btn-danger me-1" id="deleteService" name="deleteService" data-id="${service[0]}">Eliminar</button>
@@ -178,7 +184,11 @@
                                 alert("Servicio Eliminado")
                                 window.location.reload()
                             }else{
+<<<<<<< HEAD
                                 console.error('Error al editar servicios')
+=======
+                                console.error('Error al borrar servicios')
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
                             }
                         }
                         xhrdelete.send(JSON.stringify({idSer}))

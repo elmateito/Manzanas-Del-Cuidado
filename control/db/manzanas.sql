@@ -3,7 +3,11 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
+<<<<<<< HEAD
 -- Tiempo de generación: 11-03-2024 a las 09:53:35
+=======
+-- Tiempo de generación: 12-03-2024 a las 04:25:27
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -52,14 +56,19 @@ INSERT INTO `manzanas` (`idManzana`, `nombreManzana`, `direccionManzana`) VALUES
 
 CREATE TABLE `manzanas_servicios` (
   `idManzanaFK` int(11) DEFAULT NULL,
+<<<<<<< HEAD
   `idServicioFK` int(11) DEFAULT NULL,
   `fecha` datetime DEFAULT NULL
+=======
+  `idServicioFK` int(11) DEFAULT NULL
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `manzanas_servicios`
 --
 
+<<<<<<< HEAD
 INSERT INTO `manzanas_servicios` (`idManzanaFK`, `idServicioFK`, `fecha`) VALUES
 (1, 1, NULL),
 (1, 3, NULL),
@@ -79,6 +88,27 @@ INSERT INTO `manzanas_servicios` (`idManzanaFK`, `idServicioFK`, `fecha`) VALUES
 (5, 8, NULL),
 (5, 3, NULL),
 (5, 7, NULL);
+=======
+INSERT INTO `manzanas_servicios` (`idManzanaFK`, `idServicioFK`) VALUES
+(1, 1),
+(1, 3),
+(1, 5),
+(1, 7),
+(2, 2),
+(2, 4),
+(2, 3),
+(2, 6),
+(2, 8),
+(3, 1),
+(3, 3),
+(3, 5),
+(4, 1),
+(4, 5),
+(4, 6),
+(5, 8),
+(5, 3),
+(5, 7);
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
 
 -- --------------------------------------------------------
 
@@ -140,10 +170,19 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`idUsuario`, `nombre`, `tipoDoc`, `doc`, `idManzanaFK`, `rol`) VALUES
+<<<<<<< HEAD
 (1, 'user', 'T.I', 456, 5, 'Usuario'),
 (2, 'admin', 'C.C', 123, 2, 'Administrador'),
 (16, 'Tio Gilipollas', 'C.C', 750, 3, 'Usuario'),
 (17, 'gurrupleta kawai', 'C.C', 111, 2, 'Administrador');
+=======
+(1, 'user', 'C.C', 456, 5, 'Usuario'),
+(2, 'admin', 'C.C', 123, 2, 'Administrador'),
+(16, 'Tio Gilipollas', 'C.C', 750, 3, 'Usuario'),
+(17, 'gurrupleta kawai', 'C.C', 111, 2, 'Administrador'),
+(19, 'Oswaldo Usuario', 'C.C', 123456, 2, 'Usuario'),
+(20, 'Oswaldo Admin', 'T.I', 123456, 5, 'Administrador');
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
 
 --
 -- Índices para tablas volcadas
@@ -190,7 +229,11 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `manzanas`
 --
 ALTER TABLE `manzanas`
+<<<<<<< HEAD
   MODIFY `idManzana` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+=======
+  MODIFY `idManzana` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
 
 --
 -- AUTO_INCREMENT de la tabla `servicios`
@@ -202,13 +245,21 @@ ALTER TABLE `servicios`
 -- AUTO_INCREMENT de la tabla `solicitudes`
 --
 ALTER TABLE `solicitudes`
+<<<<<<< HEAD
   MODIFY `idSolicitud` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+=======
+  MODIFY `idSolicitud` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
+<<<<<<< HEAD
   MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+=======
+  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+>>>>>>> 9a8d32a (Ejecutar con Live Server)
 
 --
 -- Restricciones para tablas volcadas
